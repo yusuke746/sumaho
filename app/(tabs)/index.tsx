@@ -2,15 +2,16 @@ import { Image } from 'expo-image';
 import { Button, Platform, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import * as FileSystem from 'expo-file-system';
+
 import { getStructuredTextFromImage } from '@/utils/gemini';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 function CameraComponent() {
-  const [image, setImage] = useState(null);
-  const [structuredText, setStructuredText] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [structuredText, setStructuredText] = useState<string | null>(null);
 
   const pickImage = async () => {
     // Request camera permissions
@@ -31,8 +32,8 @@ function CameraComponent() {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
       if (result.assets[0].base64) {
-        const text = await getStructuredTextFromImage(result.assets[0].base64);
-        setStructuredText(text);
+        const structured = await getStructuredTextFromImage(result.assets[0].base64);
+        setStructuredText(structured ?? null);
       }
     }
   };
