@@ -1,11 +1,55 @@
 import { Image } from 'expo-image';
 import { Button, Platform, StyleSheet } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { useState } from 'react';
+import * as FileSystem from 'expo-file-system';
+import { getStructuredTextFromImage } from '@/utils/gemini';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+function CameraComponent() {
+  const [image, setImage] = useState(null);
+  const [structuredText, setStructuredText] = useState(null);
 
+  const pickImage = async () => {
+    // Request camera permissions
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      base64: true, // Request base64 for Gemini API
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      if (result.assets[0].base64) {
+        const text = await getStructuredTextFromImage(result.assets[0].base64);
+        setStructuredText(text);
+      }
+    }
+  };
+
+  return (
+    <ThemedView style={styles.cameraContainer}>
+      <Button title="Launch Camera" onPress={pickImage} />
+      {image && <Image source={{ uri: image }} style={styles.image} />}
+      {structuredText && (
+        <ThemedView style={styles.structuredTextContainer}>
+          <ThemedText type="subtitle">Structured Text:</ThemedText>
+          <ThemedText>{structuredText}</ThemedText>
+        </ThemedView>
+      )}
+    </ThemedView>
+  );
+}
 export default function HomeScreen() {
   return (
     <ParallaxScrollView
@@ -20,7 +64,7 @@ export default function HomeScreen() {
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
       </ThemedView>
-      <Button title="Launch Camera" onPress={() => console.log('Launch Camera Pressed')} />
+      <CameraComponent />
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
@@ -72,5 +116,25 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  cameraContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginTop: 20,
+    borderRadius: 10,
+  },
+  structuredTextContainer: {
+    marginTop: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    width: '80%',
   },
 });
