@@ -21,4 +21,5 @@ export async function getStructuredTextFromImage(base64Image: string) {
       ],
     });
 
+    return result.text();
 }
