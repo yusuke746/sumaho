@@ -44,7 +44,7 @@ function CameraComponent() {
   return (
     <ThemedView style={styles.cameraContainer}>
       <Button title="Launch Camera" onPress={pickImage} disabled={loading} />
-      {loading && <ActivityIndicator size="large" color="#0000ff" style={styles.activityIndicator} />}
+      {loading && <ActivityIndicator size="large" color="#00ff00" style={styles.activityIndicator} />} {/* Bright green color */}
       {image && !loading && <Image source={{ uri: image }} style={styles.image} />}
       {structuredText && (
         <ThemedView style={styles.structuredTextContainer}>
