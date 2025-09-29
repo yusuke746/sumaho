@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, TextInput } from 'react-native';
+import { useState } from 'react';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -9,6 +10,24 @@ import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 
 export default function TabTwoScreen() {
+  const [businessNumber, setBusinessNumber] = useState('');
+  const [businessName, setBusinessName] = useState('');
+
+  const fetchBusinessName = async (number: string) => {
+    if (number.length > 0) {
+      try {
+        const response = await fetch(`https://qwfcxeoobajwhfikeqpp.supabase.co/functions/v1/get-business-name?number=${number}`);
+        const data = await response.json();
+        setBusinessName(data.name || 'Not Found');
+      } catch (error) {
+        console.error('Error fetching business name:', error);
+        setBusinessName('Error fetching name');
+      }
+    } else {
+      setBusinessName('');
+    }
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -24,6 +43,25 @@ export default function TabTwoScreen() {
         <ThemedText type="title">Explore</ThemedText>
       </ThemedView>
       <ThemedText>This app includes example code to help you get started.</ThemedText>
+
+      <ThemedView style={styles.businessNumberContainer}>
+        <ThemedText type="subtitle">指定工事店番号:</ThemedText>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Enter business number"
+          keyboardType="numeric"
+          value={businessNumber}
+          onChangeText={(text) => {
+            setBusinessNumber(text);
+            fetchBusinessName(text);
+          }}
+        />
+        {businessName ? (
+          <ThemedText>取得した名前: {businessName}</ThemedText>
+        ) : (
+          <ThemedText>名前が入力されていません</ThemedText>
+        )}
+      </ThemedView>
       <Collapsible title="File-based routing">
         <ThemedText>
           This app has two screens:{' '}
@@ -106,5 +144,21 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+  },
+  businessNumberContainer: {
+    marginVertical: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+  },
+  textInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginTop: 10,
+    marginBottom: 10,
+    paddingHorizontal: 8,
+    color: 'black', // Ensure text is visible in dark mode
   },
 });
