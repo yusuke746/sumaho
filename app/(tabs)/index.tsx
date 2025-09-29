@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { ActivityIndicator, Button, Platform, StyleSheet } from 'react-native';
+import { ActivityIndicator, Button, Platform, StyleSheet, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 
@@ -45,7 +45,12 @@ function CameraComponent() {
     <ThemedView style={styles.cameraContainer}>
       <Button title="Launch Camera" onPress={pickImage} disabled={loading} />
       {loading && <ActivityIndicator size="large" color="#00ff00" style={styles.activityIndicator} />} {/* Bright green color */}
-      {image && !loading && <Image source={{ uri: image }} style={styles.image} />}
+      {image && !loading && (
+        <ThemedView style={styles.imageContainer}>
+          <Image source={{ uri: image }} style={styles.image} />
+          <View style={styles.circleOverlay} />
+        </ThemedView>
+      )}
       {structuredText && (
         <ThemedView style={styles.structuredTextContainer}>
           <ThemedText type="subtitle">Structured Text:</ThemedText>
@@ -144,5 +149,24 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
     width: '80%',
+  },
+  imageContainer: {
+    position: 'relative',
+    marginTop: 20,
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+    overflow: 'hidden', // Ensures the circle is clipped to the image bounds
+  },
+  circleOverlay: {
+    position: 'absolute',
+    top: '25%', // Adjust as needed to center the circle vertically
+    left: '25%', // Adjust as needed to center the circle horizontally
+    width: '50%', // 50% of the image container width
+    height: '50%', // 50% of the image container height
+    borderRadius: 100, // Makes it a circle
+    borderWidth: 2,
+    borderColor: '#00ff00', // Bright green color
+    backgroundColor: 'transparent',
   },
 });
