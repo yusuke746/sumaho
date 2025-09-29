@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Button, Platform, StyleSheet } from 'react-native';
+import { ActivityIndicator, Button, Platform, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 
@@ -12,8 +12,10 @@ import { ThemedView } from '@/components/ThemedView';
 function CameraComponent() {
   const [image, setImage] = useState<string | null>(null);
   const [structuredText, setStructuredText] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const pickImage = async () => {
+    setLoading(true);
     // Request camera permissions
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
@@ -36,12 +38,14 @@ function CameraComponent() {
         setStructuredText(structured ?? null);
       }
     }
+    setLoading(false);
   };
 
   return (
     <ThemedView style={styles.cameraContainer}>
-      <Button title="Launch Camera" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={styles.image} />}
+      <Button title="Launch Camera" onPress={pickImage} disabled={loading} />
+      {loading && <ActivityIndicator size="large" color="#0000ff" style={styles.activityIndicator} />}
+      {image && !loading && <Image source={{ uri: image }} style={styles.image} />}
       {structuredText && (
         <ThemedView style={styles.structuredTextContainer}>
           <ThemedText type="subtitle">Structured Text:</ThemedText>
@@ -123,6 +127,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
+  },
+  activityIndicator: {
+    marginTop: 20,
   },
   image: {
     width: 200,
