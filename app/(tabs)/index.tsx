@@ -28,7 +28,7 @@ function CameraComponent() {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-      base64: true, // Request base64 for Gemini API
+      base64: true, // Request base64 for OpenAI Vision API
     });
 
     if (!result.canceled) {
