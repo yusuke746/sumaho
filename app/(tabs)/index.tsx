@@ -41,6 +41,9 @@ function CameraComponent() {
     setLoading(false);
   };
 
+
+function ExplorerForm() {
+
   return (
     <ThemedView style={styles.cameraContainer}>
       <Button title="Launch Camera" onPress={pickImage} disabled={loading} />
@@ -56,10 +59,10 @@ function CameraComponent() {
           <ThemedText type="subtitle">Structured Text:</ThemedText>
           <ThemedText>{structuredText}</ThemedText>
         </ThemedView>
-      )}
-    </ThemedView>
-  );
+
 }
+
+
 export default function HomeScreen() {
   return (
     <ParallaxScrollView
