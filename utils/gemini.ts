@@ -7,7 +7,7 @@ const openai = new OpenAI({
 export async function getStructuredTextFromImage(base64Image: string) {
   const prompt = "Please extract and structure the text from this image (base64 encoded JPEG):\n" + base64Image;
   const completion = await openai.chat.completions.create({
-    model: "gpt-4-vision-preview",
+    model: "gpt-4-vision",
     messages: [
       {
         role: "user",
