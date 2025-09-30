@@ -1,25 +1,23 @@
-import { GoogleGenAI } from "@google/genai";
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function getStructuredTextFromImage(base64Image: string) {
- 
-    const ai = new GoogleGenAI({ apiKey: 'AIzaSyBIir5u8tmHYtlTZERh5bGtdJ6RMlfmA-M' });
-    
-    const result = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [
-        {
-          parts: [
-            { text: 'Please extract and structure the text from this image.' },
-            {
-              inlineData: {
-                mimeType: 'image/jpeg', // Assuming JPEG. Adjust if needed.
-                data: base64Image,
-              },
-            },
-          ],
-        },
-      ],
-    });
-
-    return result.text;
+  const prompt = "Please extract and structure the text from this image (base64 encoded JPEG):\n" + base64Image;
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4-vision-preview",
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: "Please extract and structure the text from this image." },
+          { type: "image_url", image_url: { url: `data:image/jpeg;base64,${base64Image}` } }
+        ]
+      }
+    ],
+    max_tokens: 1024,
+  });
+  return completion.choices[0]?.message?.content ?? null;
 }
