@@ -94,6 +94,8 @@ function ExplorerForm() {
 
   );
 }
+
+
 export default function HomeScreen() {
   return (
     <ParallaxScrollView
