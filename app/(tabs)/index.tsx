@@ -1,4 +1,7 @@
 import { Camera } from 'expo-camera';
+
+// 軽度な修正: ファイル先頭にコメント追加
+
 import { ActivityIndicator, Button, StyleSheet, View, Image, Platform, TextInput } from 'react-native';
 import { useState, useRef } from 'react';
 
