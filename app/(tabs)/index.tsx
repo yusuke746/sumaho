@@ -1,5 +1,5 @@
 import { Camera } from 'expo-camera';
-import { ActivityIndicator, Button, StyleSheet, View, Image } from 'react-native';
+import { ActivityIndicator, Button, StyleSheet, View, Image, Platform, TextInput } from 'react-native';
 import { useState, useRef } from 'react';
 
 
