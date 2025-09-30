@@ -1,6 +1,8 @@
 import { Camera } from 'expo-camera';
 import { ActivityIndicator, Button, StyleSheet, View, Image } from 'react-native';
 import { useState, useRef } from 'react';
+import { Platform } from 'react-native';
+
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
