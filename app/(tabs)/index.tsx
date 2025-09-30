@@ -1,7 +1,3 @@
-import { Camera } from 'expo-camera';
-
-// 軽度な修正: ファイル先頭にコメント追加
-
 import { ActivityIndicator, Button, StyleSheet, View, Image, Platform, TextInput } from 'react-native';
 import { useState, useRef } from 'react';
 
@@ -10,91 +6,7 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-
-function CameraComponent() {
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [image, setImage] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const cameraRef = useRef<Camera>(null);
-
-  const requestPermission = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === 'granted');
-  };
-
-  const takePicture = async () => {
-    if (cameraRef.current) {
-      setLoading(true);
-      const photo = await cameraRef.current.takePictureAsync();
-      setImage(photo.uri);
-      setLoading(false);
-    }
-  };
-
-  if (hasPermission === null) {
-    requestPermission();
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <View><Button title="Grant Camera Permission" onPress={requestPermission} /></View>;
-  }
-
-  return (
-    <View style={styles.cameraContainer}>
-      {!image ? (
-        <>
-          <Camera style={styles.camera} ref={cameraRef}>
-            <View style={styles.circleOverlay} />
-          </Camera>
-          <Button title="Take Picture" onPress={takePicture} disabled={loading} />
-          {loading && <ActivityIndicator size="large" color="#00ff00" style={styles.activityIndicator} />}
-        </>
-      ) : (
-        <Image source={{ uri: image }} style={styles.image} />
-      )}
-    </View>
-
-
-
-function ExplorerForm() {
-  const [customerNo, setCustomerNo] = useState('');
-  const [oldMeterNo, setOldMeterNo] = useState('');
-  const [exchangeDate, setExchangeDate] = useState('');
-  const [newMeterNo, setNewMeterNo] = useState('');
-
-  return (
-    <View style={{ padding: 16 }}>
-      <TextInput
-        placeholder="お客様番号"
-        value={customerNo}
-        onChangeText={setCustomerNo}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="旧メーター番号"
-        value={oldMeterNo}
-        onChangeText={setOldMeterNo}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="メーター交換日"
-        value={exchangeDate}
-        onChangeText={setExchangeDate}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="新メーター番号"
-        value={newMeterNo}
-        onChangeText={setNewMeterNo}
-        style={styles.input}
-      />
-    </View>
-  );
-}
-
-  );
-}
-
+import { CameraComponent } from '@/components/CameraComponent.tsx';
 
 export default function HomeScreen() {
   return (
@@ -144,6 +56,43 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
+  );
+}
+
+// ここから下にExplorerFormを定義
+function ExplorerForm() {
+  const [customerNo, setCustomerNo] = useState('');
+  const [oldMeterNo, setOldMeterNo] = useState('');
+  const [exchangeDate, setExchangeDate] = useState('');
+  const [newMeterNo, setNewMeterNo] = useState('');
+
+  return (
+    <View style={{ padding: 16 }}>
+      <TextInput
+        placeholder="お客様番号"
+        value={customerNo}
+        onChangeText={setCustomerNo}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="旧メーター番号"
+        value={oldMeterNo}
+        onChangeText={setOldMeterNo}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="メーター交換日"
+        value={exchangeDate}
+        onChangeText={setExchangeDate}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="新メーター番号"
+        value={newMeterNo}
+        onChangeText={setNewMeterNo}
+        style={styles.input}
+      />
+    </View>
   );
 }
 
