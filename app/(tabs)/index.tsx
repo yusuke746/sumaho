@@ -1,7 +1,9 @@
 import { Camera } from 'expo-camera';
-import { ActivityIndicator, Button, StyleSheet, View, Image } from 'react-native';
+
+// 軽度な修正: ファイル先頭にコメント追加
+
+import { ActivityIndicator, Button, StyleSheet, View, Image, Platform, TextInput } from 'react-native';
 import { useState, useRef } from 'react';
-import { Platform } from 'react-native';
 
 
 import { HelloWave } from '@/components/HelloWave';
@@ -52,7 +54,7 @@ function CameraComponent() {
       )}
     </View>
 
-import { TextInput } from 'react-native';
+
 
 function ExplorerForm() {
   const [customerNo, setCustomerNo] = useState('');
