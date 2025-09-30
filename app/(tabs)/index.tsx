@@ -1,48 +1,36 @@
-import { Image } from 'expo-image';
-import { ActivityIndicator, Button, Platform, StyleSheet, View } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
+import { Camera } from 'expo-camera';
 
-import { getStructuredTextFromImage } from '@/utils/gemini';
+// 軽度な修正: ファイル先頭にコメント追加
+
+import { ActivityIndicator, Button, StyleSheet, View, Image, Platform, TextInput } from 'react-native';
+import { useState, useRef } from 'react';
+
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+
 function CameraComponent() {
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [image, setImage] = useState<string | null>(null);
-  const [structuredText, setStructuredText] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const cameraRef = useRef<Camera>(null);
 
-  const pickImage = async () => {
-    setLoading(true);
-    // Request camera permissions
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Sorry, we need camera roll permissions to make this work!');
-      return;
-    }
-
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-      base64: true, // Request base64 for OpenAI Vision API
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      if (result.assets[0].base64) {
-        const structured = await getStructuredTextFromImage(result.assets[0].base64);
-        setStructuredText(structured ?? null);
-      }
-    }
-    setLoading(false);
+  const requestPermission = async () => {
+    const { status } = await Camera.requestCameraPermissionsAsync();
+    setHasPermission(status === 'granted');
   };
 
+  const takePicture = async () => {
+    if (cameraRef.current) {
+      setLoading(true);
+      const photo = await cameraRef.current.takePictureAsync();
+      setImage(photo.uri);
+      setLoading(false);
+    }
+  };
 
-function ExplorerForm() {
   if (hasPermission === null) {
     requestPermission();
     return <View />;
@@ -52,22 +40,58 @@ function ExplorerForm() {
   }
 
   return (
-    <ThemedView style={styles.cameraContainer}>
-      <Button title="Launch Camera" onPress={pickImage} disabled={loading} />
-      {loading && <ActivityIndicator size="large" color="#00ff00" style={styles.activityIndicator} />} {/* Bright green color */}
-      {image && !loading && (
-        <ThemedView style={styles.imageContainer}>
-          <Image source={{ uri: image }} style={styles.image} />
-          <View style={styles.circleOverlay} />
-        </ThemedView>
+    <View style={styles.cameraContainer}>
+      {!image ? (
+        <>
+          <Camera style={styles.camera} ref={cameraRef}>
+            <View style={styles.circleOverlay} />
+          </Camera>
+          <Button title="Take Picture" onPress={takePicture} disabled={loading} />
+          {loading && <ActivityIndicator size="large" color="#00ff00" style={styles.activityIndicator} />}
+        </>
+      ) : (
+        <Image source={{ uri: image }} style={styles.image} />
       )}
-      {structuredText && (
-        <ThemedView style={styles.structuredTextContainer}>
-          <ThemedText type="subtitle">Structured Text:</ThemedText>
-          <ThemedText>{structuredText}</ThemedText>
-        </ThemedView>
-      )}
-    </ThemedView>
+    </View>
+
+
+
+function ExplorerForm() {
+  const [customerNo, setCustomerNo] = useState('');
+  const [oldMeterNo, setOldMeterNo] = useState('');
+  const [exchangeDate, setExchangeDate] = useState('');
+  const [newMeterNo, setNewMeterNo] = useState('');
+
+  return (
+    <View style={{ padding: 16 }}>
+      <TextInput
+        placeholder="お客様番号"
+        value={customerNo}
+        onChangeText={setCustomerNo}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="旧メーター番号"
+        value={oldMeterNo}
+        onChangeText={setOldMeterNo}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="メーター交換日"
+        value={exchangeDate}
+        onChangeText={setExchangeDate}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="新メーター番号"
+        value={newMeterNo}
+        onChangeText={setNewMeterNo}
+        style={styles.input}
+      />
+    </View>
+  );
+}
+
   );
 }
 
@@ -87,6 +111,7 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <CameraComponent />
+      <ExplorerForm />
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
