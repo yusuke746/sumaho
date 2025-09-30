@@ -54,7 +54,7 @@ function CameraComponent() {
       )}
     </View>
 
-import { TextInput } from 'react-native';
+
 
 function ExplorerForm() {
   const [customerNo, setCustomerNo] = useState('');
