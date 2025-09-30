@@ -59,7 +59,9 @@ function ExplorerForm() {
           <ThemedText type="subtitle">Structured Text:</ThemedText>
           <ThemedText>{structuredText}</ThemedText>
         </ThemedView>
-
+      )}
+    </ThemedView>
+  );
 }
 
 
