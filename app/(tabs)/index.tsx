@@ -43,6 +43,13 @@ function CameraComponent() {
 
 
 function ExplorerForm() {
+  if (hasPermission === null) {
+    requestPermission();
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <View><Button title="Grant Camera Permission" onPress={requestPermission} /></View>;
+  }
 
   return (
     <ThemedView style={styles.cameraContainer}>
