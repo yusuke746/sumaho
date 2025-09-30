@@ -51,6 +51,45 @@ function CameraComponent() {
         <Image source={{ uri: image }} style={styles.image} />
       )}
     </View>
+
+import { TextInput } from 'react-native';
+
+function ExplorerForm() {
+  const [customerNo, setCustomerNo] = useState('');
+  const [oldMeterNo, setOldMeterNo] = useState('');
+  const [exchangeDate, setExchangeDate] = useState('');
+  const [newMeterNo, setNewMeterNo] = useState('');
+
+  return (
+    <View style={{ padding: 16 }}>
+      <TextInput
+        placeholder="お客様番号"
+        value={customerNo}
+        onChangeText={setCustomerNo}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="旧メーター番号"
+        value={oldMeterNo}
+        onChangeText={setOldMeterNo}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="メーター交換日"
+        value={exchangeDate}
+        onChangeText={setExchangeDate}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="新メーター番号"
+        value={newMeterNo}
+        onChangeText={setNewMeterNo}
+        style={styles.input}
+      />
+    </View>
+  );
+}
+
   );
 }
 export default function HomeScreen() {
@@ -68,6 +107,7 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <CameraComponent />
+      <ExplorerForm />
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
