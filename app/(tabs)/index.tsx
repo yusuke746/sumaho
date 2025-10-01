@@ -41,6 +41,7 @@ export default function BusinessNumberScreen() {
     }
   };
 
+    <ParallaxScrollView>
       <>
         <ThemedView style={styles.titleContainer}>
           <ThemedText type="title">Welcome!</ThemedText>
@@ -59,6 +60,7 @@ export default function BusinessNumberScreen() {
           />
           <ThemedText>指定工事店名: {businessName}</ThemedText>
         </View>
+        <Button title="読み取り" onPress={handlePickImage} />
       </>
     </ParallaxScrollView>
   );
