@@ -22,8 +22,7 @@ export default function BusinessNumberScreen() {
     }
   };
 
-  return (
-    <ParallaxScrollView>
+  >
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
       </ThemedView>
@@ -71,18 +70,8 @@ const styles = StyleSheet.create({
 
 
 
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
+
+
       </ThemedView>
       <CameraComponent />      <ExplorerForm />
       
