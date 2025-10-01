@@ -22,7 +22,9 @@ export default function BusinessNumberScreen() {
         setBusinessName('Error fetching name');
       }
     } else {
-
+      setBusinessName('');
+    }
+  };
 
   const handlePickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -33,11 +35,6 @@ export default function BusinessNumberScreen() {
     if (!result.canceled) {
       // 画像取得後の処理
       console.log(result.assets[0].uri);
-    }
-  };
-
-
-      setBusinessName('');
     }
   };
 
@@ -62,8 +59,60 @@ export default function BusinessNumberScreen() {
           <ThemedText>指定工事店名: {businessName}</ThemedText>
         </View>
         <Button title="読み取り" onPress={handlePickImage} />
+        {/* ExplorerFormを追加 */}
+        <ExplorerForm />
       </>
     </ParallaxScrollView>
+  );
+}
+
+// ExplorerForm用のスタイルを別名で定義
+const explorerStyles = StyleSheet.create({
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginTop: 10,
+    marginBottom: 10,
+    paddingHorizontal: 8,
+    color: 'black',
+  },
+  // 必要なら他のスタイルもここに追加
+});
+
+function ExplorerForm() {
+  const [customerNo, setCustomerNo] = useState('');
+  const [oldMeterNo, setOldMeterNo] = useState('');
+  const [exchangeDate, setExchangeDate] = useState('');
+  const [newMeterNo, setNewMeterNo] = useState('');
+
+  return (
+    <View style={{ padding: 16 }}>
+      <TextInput
+        placeholder="お客様番号"
+        value={customerNo}
+        onChangeText={setCustomerNo}
+        style={explorerStyles.input}
+      />
+      <TextInput
+        placeholder="旧メーター番号"
+        value={oldMeterNo}
+        onChangeText={setOldMeterNo}
+        style={explorerStyles.input}
+      />
+      <TextInput
+        placeholder="メーター交換日"
+        value={exchangeDate}
+        onChangeText={setExchangeDate}
+        style={explorerStyles.input}
+      />
+      <TextInput
+        placeholder="新メーター番号"
+        value={newMeterNo}
+        onChangeText={setNewMeterNo}
+        style={explorerStyles.input}
+      />
+    </View>
   );
 }
 
@@ -86,120 +135,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 8,
     color: 'black',
-  },
-});
-
-
-
-
-
-
-
-      </ThemedView>
-      <View>
-        <CameraComponent />
-        <ExplorerForm />
-      </View>
-      
-
->>    </ParallaxScrollView>
-  );
-}
-
-// ここから下にExplorerFormを定義
-function ExplorerForm() {
-  const [customerNo, setCustomerNo] = useState('');
-  const [oldMeterNo, setOldMeterNo] = useState('');
-  const [exchangeDate, setExchangeDate] = useState('');
-  const [newMeterNo, setNewMeterNo] = useState('');
-
-  return (
-    <View style={{ padding: 16 }}>
-      <TextInput
-        placeholder="お客様番号"
-        value={customerNo}
-        onChangeText={setCustomerNo}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="旧メーター番号"
-        value={oldMeterNo}
-        onChangeText={setOldMeterNo}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="メーター交換日"
-        value={exchangeDate}
-        onChangeText={setExchangeDate}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="新メーター番号"
-        value={newMeterNo}
-        onChangeText={setNewMeterNo}
-        style={styles.input}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-  cameraContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  activityIndicator: {
-    marginTop: 20,
-  },
-  image: {
-    width: 200,
-    height: 200,
-    marginTop: 20,
-    borderRadius: 10,
-  },
-  structuredTextContainer: {
-    marginTop: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    width: '80%',
-  },
-  imageContainer: {
-    position: 'relative',
-    marginTop: 20,
-    width: 200,
-    height: 200,
-    borderRadius: 10,
-    overflow: 'hidden', // Ensures the circle is clipped to the image bounds
-  },
-  circleOverlay: {
-    position: 'absolute',
-    top: '25%', // Adjust as needed to center the circle vertically
-    left: '25%', // Adjust as needed to center the circle horizontally
-    width: '50%', // 50% of the image container width
-    height: '50%', // 50% of the image container height
-    borderRadius: 100, // Makes it a circle
-    borderWidth: 2,
-    borderColor: '#00ff00', // Bright green color
-    backgroundColor: 'transparent',
   },
 });
