@@ -1,4 +1,8 @@
 import { useState } from 'react';
+
+import * as ImagePicker from 'expo-image-picker';
+import { Button } from 'react-native';
+
 import { StyleSheet, TextInput, View } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -18,6 +22,21 @@ export default function BusinessNumberScreen() {
         setBusinessName('Error fetching name');
       }
     } else {
+
+
+  const handlePickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 1,
+    });
+    if (!result.canceled) {
+      // 画像取得後の処理
+      console.log(result.assets[0].uri);
+    }
+  };
+
+
       setBusinessName('');
     }
   };
