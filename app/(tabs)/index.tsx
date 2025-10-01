@@ -31,12 +31,14 @@ export default function BusinessNumberScreen() {
           <TextInput
             style={styles.textInput}
             placeholder="指定工事店番号を入力"
+            keyboardType="numeric"
+            value={businessNumber}
+            onChangeText={(text) => {
+              setBusinessNumber(text);
+              fetchBusinessName(text);
+            }}
+          />
       </>
-          keyboardType="numeric"
-          value={businessNumber}
-          onChangeText={(text) => {
-            setBusinessNumber(text);
-            fetchBusinessName(text);
           }}
         />
         <ThemedText>指定工事店名: {businessName}</ThemedText>
