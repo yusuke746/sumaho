@@ -1,5 +1,71 @@
-import { ActivityIndicator, Button, StyleSheet, View, Image, Platform, TextInput } from 'react-native';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
+import { StyleSheet, TextInput, View } from 'react-native';
+import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+
+export default function BusinessNumberScreen() {
+  const [businessNumber, setBusinessNumber] = useState('');
+  const [businessName, setBusinessName] = useState('');
+
+  const fetchBusinessName = async (number: string) => {
+    if (number.length > 0) {
+      try {
+        const response = await fetch(`https://qwfcxeoobajwhfikeqpp.supabase.co/functions/v1/get-business-name?business_code=${number}`);
+        const data = await response.json();
+        setBusinessName(data.name || 'Not Found');
+      } catch (error) {
+        setBusinessName('Error fetching name');
+      }
+    } else {
+      setBusinessName('');
+    }
+  };
+
+  return (
+    <ParallaxScrollView>
+      <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title">Welcome!</ThemedText>
+      </ThemedView>
+      <View style={styles.formContainer}>
+        <ThemedText>指定工事店番号:</ThemedText>
+        <TextInput
+          style={styles.textInput}
+          placeholder="指定工事店番号を入力"
+          keyboardType="numeric"
+          value={businessNumber}
+          onChangeText={(text) => {
+            setBusinessNumber(text);
+            fetchBusinessName(text);
+          }}
+        />
+        <ThemedText>指定工事店名: {businessName}</ThemedText>
+      </View>
+    </ParallaxScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 32,
+    marginBottom: 16,
+  },
+  formContainer: {
+    padding: 16,
+  },
+  textInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginTop: 10,
+    marginBottom: 10,
+    paddingHorizontal: 8,
+    color: 'black',
+  },
+});
 
 
 import { HelloWave } from '@/components/HelloWave';
