@@ -23,6 +23,7 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <CameraComponent />
+<<<<<<< HEAD
       <ExplorerForm />
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
@@ -55,6 +56,11 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">app-example</ThemedText>.
         </ThemedText>
       </ThemedView>
+=======
+
+      
+
+>>>>>>> fb58f44 (WIP: stash before rebase)
     </ParallaxScrollView>
   );
 }
