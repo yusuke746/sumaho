@@ -96,7 +96,10 @@ const styles = StyleSheet.create({
 
 
       </ThemedView>
-      <CameraComponent />      <ExplorerForm />
+      <>
+        <CameraComponent />
+        <ExplorerForm />
+      </>
       
 
 >>    </ParallaxScrollView>
