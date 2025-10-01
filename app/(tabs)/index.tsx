@@ -38,11 +38,9 @@ export default function BusinessNumberScreen() {
               fetchBusinessName(text);
             }}
           />
+          <ThemedText>指定工事店名: {businessName}</ThemedText>
+        </View>
       </>
-          }}
-        />
-        <ThemedText>指定工事店名: {businessName}</ThemedText>
-      </View>
     </ParallaxScrollView>
   );
 }
