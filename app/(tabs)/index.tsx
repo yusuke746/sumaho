@@ -22,14 +22,16 @@ export default function BusinessNumberScreen() {
     }
   };
 
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-      </ThemedView>
-      <View style={styles.formContainer}>
-        <ThemedText>指定工事店番号:</ThemedText>
-        <TextInput
-          style={styles.textInput}
-          placeholder="指定工事店番号を入力"
+      <>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="title">Welcome!</ThemedText>
+        </ThemedView>
+        <View style={styles.formContainer}>
+          <ThemedText>指定工事店番号:</ThemedText>
+          <TextInput
+            style={styles.textInput}
+            placeholder="指定工事店番号を入力"
+      </>
           keyboardType="numeric"
           value={businessNumber}
           onChangeText={(text) => {
