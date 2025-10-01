@@ -22,7 +22,6 @@ export default function BusinessNumberScreen() {
     }
   };
 
-  >
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
       </ThemedView>
