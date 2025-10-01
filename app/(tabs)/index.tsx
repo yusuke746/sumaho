@@ -41,6 +41,7 @@ export default function BusinessNumberScreen() {
     }
   };
 
+  return (
     <ParallaxScrollView>
       <>
         <ThemedView style={styles.titleContainer}>
