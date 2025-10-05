@@ -2,8 +2,8 @@
   "expo": {
 
     "extra": {
-      "OPENAI_API_KEY": "<secret_hidden>"
-      "EXPO_PUBLIC_OPENAI_API_KEY": "<secret_hidden>",
+      "OPENAI_API_KEY": "<secret_hidden>",
+      "EXPO_PUBLIC_OPENAI_API_KEY": "<secret_hidden>"
     },
 
     "name": "sumaho",
