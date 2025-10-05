@@ -9,13 +9,13 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 import Constants from 'expo-constants';
+import { OpenAI } from 'openai';
 
+const apiKey = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
 
-const OPENAI_API_KEY =
-  (Constants.expoConfig && Constants.expoConfig.extra && Constants.expoConfig.extra.OPENAI_API_KEY) ||
-  (Constants.manifest && Constants.manifest.extra && Constants.manifest.extra.OPENAI_API_KEY) ||
-  '';
-
+const openai = new OpenAI({
+  apiKey: apiKey,
+});
 
 export default function BusinessNumberScreen() {
   const [businessNumber, setBusinessNumber] = useState('');
@@ -63,12 +63,11 @@ export default function BusinessNumberScreen() {
           const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${OPENAI_API_KEY}`,
+              'Authorization': `Bearer ${process.env.EXPO_PUBLIC_OPENAI_API_KEY}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-
-              model: 'gpt-4-vision-preview',
+              model: 'gpt-4-turbo', // ← ここを修正
               messages: [
                 {
                   role: 'user',

@@ -1,10 +1,7 @@
 {
   "expo": {
 
-    "extra": {
-      "OPENAI_API_KEY": "<secret_hidden>",
-      "EXPO_PUBLIC_OPENAI_API_KEY": "<secret_hidden>"
-    },
+    "extra": {},
 
     "name": "sumaho",
     "slug": "sumaho",
