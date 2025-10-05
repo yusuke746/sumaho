@@ -11,6 +11,7 @@ import { ThemedView } from '@/components/ThemedView';
 export default function BusinessNumberScreen() {
   const [businessNumber, setBusinessNumber] = useState('');
   const [businessName, setBusinessName] = useState('');
+  const [jsonResult, setJsonResult] = useState('');
 
   const fetchBusinessName = async (number: string) => {
     if (number.length > 0) {
@@ -41,8 +42,43 @@ export default function BusinessNumberScreen() {
       quality: 1,
     });
     if (!result.canceled) {
-      // 画像取得後の処理
-      console.log(result.assets[0].uri);
+      try {
+        // 画像データをbase64で取得
+        const asset = result.assets[0];
+        const response = await fetch(asset.uri);
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const base64data = reader.result?.toString().split(',')[1];
+          // OpenAI APIリクエスト
+          const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${process.env.EXPO_PUBLIC_OPENAI_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+
+              model: 'gpt-4-vision-preview',
+              messages: [
+                {
+                  role: 'user',
+                  content: [
+                    { type: 'text', text: 'この画像を解析してJSON形式で返してください。' },
+                    { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${base64data}` } }
+                  ]
+                }
+              ],
+              max_tokens: 1024
+            }),
+          });
+          const openaiData = await openaiRes.json();
+          setJsonResult(JSON.stringify(openaiData, null, 2));
+        };
+        reader.readAsDataURL(blob);
+      } catch (error) {
+        setJsonResult('Error analyzing image');
+      }
     }
   };
 
@@ -51,6 +87,19 @@ export default function BusinessNumberScreen() {
       <>
         <ThemedView style={styles.titleContainer}>
           <ThemedText type="title">Welcome!</ThemedText>
+
+        {jsonResult && (
+          <View style={{ padding: 16 }}>
+            <ThemedText>OpenAI解析結果:</ThemedText>
+            <TextInput
+              style={{ height: 200, borderColor: 'gray', borderWidth: 1, color: 'black' }}
+              value={jsonResult}
+              multiline
+              editable={false}
+            />
+          </View>
+        )}
+
         </ThemedView>
         <View style={styles.formContainer}>
           <ThemedText>指定工事店番号:</ThemedText>
