@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView, Button } from 'react-native';
 import { Camera } from 'expo-camera';
 
-export function CameraComponent() {
+export default function CameraComponent() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const cameraRef = useRef<Camera>(null);
+  // CameraTypeは文字列型
+  const [type, setType] = useState<'front' | 'back'>('back');
+  const cameraRef = useRef<Camera | null>(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
 
@@ -68,6 +69,9 @@ export function CameraComponent() {
       >
         <Text style={styles.buttonText}>{loading ? '読み取り中...' : '読み取り'}</Text>
       </TouchableOpacity>
+      <Button title="切り替え" onPress={() => setType(
+        type === 'back' ? 'front' : 'back'
+      )} />
       <View style={styles.resultContainer}>
         {loading && <ActivityIndicator size="large" color="#2196F3" />}
         {result && (

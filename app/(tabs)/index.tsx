@@ -1,21 +1,15 @@
 import { useState } from 'react';
-
 import * as ImagePicker from 'expo-image-picker';
-import { Button } from 'react-native';
-
-import { StyleSheet, TextInput, View } from 'react-native';
+import { Button, Image, StyleSheet, TextInput, View, Platform } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-import Constants from 'expo-constants';
-import { OpenAI } from 'openai';
+// 必要なコンポーネントをimport
+import CameraComponent from '@/components/CameraComponent';
+import HelloWave from '@/components/HelloWave';
 
 const apiKey = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
-
-const openai = new OpenAI({
-  apiKey: apiKey,
-});
 
 export default function BusinessNumberScreen() {
   const [businessNumber, setBusinessNumber] = useState('');
@@ -52,22 +46,20 @@ export default function BusinessNumberScreen() {
     });
     if (!result.canceled) {
       try {
-        // 画像データをbase64で取得
         const asset = result.assets[0];
         const response = await fetch(asset.uri);
         const blob = await response.blob();
         const reader = new FileReader();
         reader.onloadend = async () => {
           const base64data = reader.result?.toString().split(',')[1];
-          // OpenAI APIリクエスト
           const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${process.env.EXPO_PUBLIC_OPENAI_API_KEY}`,
+              'Authorization': `Bearer ${apiKey}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'gpt-4-turbo', // ← ここを修正
+              model: 'gpt-4-turbo',
               messages: [
                 {
                   role: 'user',
@@ -106,6 +98,7 @@ export default function BusinessNumberScreen() {
       <CameraComponent />
 
       <ExplorerForm />
+
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
@@ -121,12 +114,14 @@ export default function BusinessNumberScreen() {
           to open developer tools.
         </ThemedText>
       </ThemedView>
+
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 2: Explore</ThemedText>
         <ThemedText>
           {`Tap the Explore tab to learn more about what's included in this starter app.`}
         </ThemedText>
       </ThemedView>
+
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
         <ThemedText>
@@ -137,73 +132,6 @@ export default function BusinessNumberScreen() {
           <ThemedText type="defaultSemiBold">app-example</ThemedText>.
         </ThemedText>
       </ThemedView>
-
-
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-
-    <ParallaxScrollView>
-      <>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="title">Welcome!</ThemedText>
-          {jsonResult && (
-            <View style={{ padding: 16 }}>
-              <ThemedText>OpenAI解析結果:</ThemedText>
-              <View>
-                <TextInput
-                  style={{ height: 200, borderColor: 'gray', borderWidth: 1, color: 'black' }}
-                  value={jsonResult}
-                  multiline
-                  editable={false}
-                />
-              </View>
-            </View>
-          )}
-        </ThemedView>
-        <View style={styles.formContainer}>
-          <ThemedText>指定工事店番号:</ThemedText>
-          <TextInput
-            style={styles.textInput}
-            placeholder="指定工事店番号を入力"
-            keyboardType="numeric"
-            value={businessNumber}
-            onChangeText={(text) => {
-              setBusinessNumber(text);
-              fetchBusinessName(text);
-            }}
-          />
-          <ThemedText>指定工事店名: {businessName}</ThemedText>
-        </View>
-        <Button title="読み取り" onPress={handlePickImage} />
-        <ExplorerForm />
-      </>
-
     </ParallaxScrollView>
   );
 }
@@ -219,7 +147,6 @@ const explorerStyles = StyleSheet.create({
     paddingHorizontal: 8,
     color: 'black',
   },
-  // 必要なら他のスタイルもここに追加
 });
 
 function ExplorerForm() {
@@ -277,5 +204,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 8,
     color: 'black',
+  },
+  reactLogo: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+  },
+  stepContainer: {
+    marginVertical: 16,
+    padding: 16,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
   },
 });
