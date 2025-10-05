@@ -15,7 +15,15 @@ export default function BusinessNumberScreen() {
   const fetchBusinessName = async (number: string) => {
     if (number.length > 0) {
       try {
-        const response = await fetch(`https://qwfcxeoobajwhfikeqpp.supabase.co/functions/v1/get-business-name?business_code=${number}`);
+        const response = await fetch(
+          `https://qwfcxeoobajwhfikeqpp.supabase.co/functions/v1/get-business-name?business_code=${number}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
         const data = await response.json();
         setBusinessName(data.name || 'Not Found');
       } catch (error) {
