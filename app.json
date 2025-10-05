@@ -1,5 +1,8 @@
 {
   "expo": {
+
+    "extra": {},
+
     "name": "sumaho",
     "slug": "sumaho",
     "version": "1.0.0",
