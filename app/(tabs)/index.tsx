@@ -8,6 +8,15 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
+import Constants from 'expo-constants';
+
+
+const OPENAI_API_KEY =
+  (Constants.expoConfig && Constants.expoConfig.extra && Constants.expoConfig.extra.OPENAI_API_KEY) ||
+  (Constants.manifest && Constants.manifest.extra && Constants.manifest.extra.OPENAI_API_KEY) ||
+  '';
+
+
 export default function BusinessNumberScreen() {
   const [businessNumber, setBusinessNumber] = useState('');
   const [businessName, setBusinessName] = useState('');
@@ -54,7 +63,7 @@ export default function BusinessNumberScreen() {
           const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${process.env.EXPO_PUBLIC_OPENAI_API_KEY}`,
+              'Authorization': `Bearer ${OPENAI_API_KEY}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -87,19 +96,19 @@ export default function BusinessNumberScreen() {
       <>
         <ThemedView style={styles.titleContainer}>
           <ThemedText type="title">Welcome!</ThemedText>
-
-        {jsonResult && (
-          <View style={{ padding: 16 }}>
-            <ThemedText>OpenAI解析結果:</ThemedText>
-            <TextInput
-              style={{ height: 200, borderColor: 'gray', borderWidth: 1, color: 'black' }}
-              value={jsonResult}
-              multiline
-              editable={false}
-            />
-          </View>
-        )}
-
+          {jsonResult && (
+            <View style={{ padding: 16 }}>
+              <ThemedText>OpenAI解析結果:</ThemedText>
+              <View>
+                <TextInput
+                  style={{ height: 200, borderColor: 'gray', borderWidth: 1, color: 'black' }}
+                  value={jsonResult}
+                  multiline
+                  editable={false}
+                />
+              </View>
+            </View>
+          )}
         </ThemedView>
         <View style={styles.formContainer}>
           <ThemedText>指定工事店番号:</ThemedText>
@@ -116,7 +125,6 @@ export default function BusinessNumberScreen() {
           <ThemedText>指定工事店名: {businessName}</ThemedText>
         </View>
         <Button title="読み取り" onPress={handlePickImage} />
-        {/* ExplorerFormを追加 */}
         <ExplorerForm />
       </>
     </ParallaxScrollView>
