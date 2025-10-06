@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Camera } from 'expo-camera';
+import Camera from 'expo-camera';
 
 export default function CameraComponent() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
