@@ -15,11 +15,11 @@
     "@expo/vector-icons": "^15.0.2",
     "@google/genai": "^1.17.0",
     "@google/generative-ai": "^0.24.1",
+    "@radix-ui/react-dialog": "^1.0.6",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
     "axios": "^1.11.0",
-    "@radix-ui/react-dialog": "^1.0.6",
     "expo": "~54.0.12",
     "expo-blur": "~15.0.7",
     "expo-camera": "~17.0.8",
@@ -56,11 +56,9 @@
     "eslint-config-expo": "~10.0.0",
     "typescript": "~5.9.2"
   },
-
   "engines": {
     "node": ">=20.19.4"
   },
-
   "private": true,
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
