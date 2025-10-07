@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Platform } from 'react-native';
-import Camera from 'expo-camera';
+import { Camera } from 'expo-camera';
 
 export default function CameraComponent() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -30,7 +30,11 @@ export default function CameraComponent() {
   return (
     <View style={{ flex: 1 }}>
       {showCamera ? (
-        <Camera style={{ flex: 1 }} />
+        <Camera
+          style={{ flex: 1 }}
+          ref={ref => { /* ... */ }}
+          // ...他のprops
+        />
       ) : (
         <TouchableOpacity
           style={{
